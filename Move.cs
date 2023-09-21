@@ -24,39 +24,205 @@ public class Move
 			Enums.MoveType.OutsideCorner => GetLegalMovesOutsideCorner(baseOrientation, sourceAbsolutePosition),
 			_ => throw new ArgumentOutOfRangeException(nameof(moveType), moveType, null)
 		};
-
-		// legalMoves.Add(new LegalMove(Cardinal.North, MoveType.Empty, Orientation.Up));
-		// legalMoves.Add(new LegalMove(Cardinal.North, MoveType.Empty, Orientation.Right));
-		// legalMoves.Add(new LegalMove(Cardinal.North, MoveType.Empty, Orientation.Down));
-		// legalMoves.Add(new LegalMove(Cardinal.North, MoveType.Empty, Orientation.Left));
-		// legalMoves.Add(new LegalMove(Cardinal.NorthEast, MoveType.Empty, Orientation.Up));
-		// legalMoves.Add(new LegalMove(Cardinal.NorthEast, MoveType.Empty, Orientation.Right));
-		// legalMoves.Add(new LegalMove(Cardinal.NorthEast, MoveType.Empty, Orientation.Down));
-		// legalMoves.Add(new LegalMove(Cardinal.NorthEast, MoveType.Empty, Orientation.Left));
 	}
 
-	//todo - this is test data
 	static List<LegalMove> GetLegalMovesOutsideCorner(Enums.Orientation baseOrientation, Vector3I sourceAbsolutePosition)
 	{
-		return GetLegalMovesEmpty(baseOrientation, sourceAbsolutePosition);
+		return new List<LegalMove>
+		{
+			new (Enums.Cardinal.North, Enums.MoveType.Wall, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.North, Enums.MoveType.InsideCorner, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+
+			new (Enums.Cardinal.NorthEast, Enums.MoveType.Empty, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+
+			new (Enums.Cardinal.East, Enums.MoveType.Wall, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.East, Enums.MoveType.InsideCorner, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+
+			new (Enums.Cardinal.SouthEast, Enums.MoveType.Wall, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthEast, Enums.MoveType.Wall, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthEast, Enums.MoveType.InsideCorner, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+
+			new (Enums.Cardinal.South, Enums.MoveType.Floor, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.South, Enums.MoveType.Wall, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.South, Enums.MoveType.OutsideCorner, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.South, Enums.MoveType.OutsideCorner, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.Floor, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.Wall, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.Wall, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.InsideCorner, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.OutsideCorner, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+
+			new (Enums.Cardinal.West, Enums.MoveType.Floor, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.West, Enums.MoveType.Wall, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.West, Enums.MoveType.OutsideCorner, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.West, Enums.MoveType.OutsideCorner, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+		};
 	}
 
-	//todo - this is test data
 	static List<LegalMove> GetLegalMovesInsideCorner(Enums.Orientation baseOrientation, Vector3I sourceAbsolutePosition)
 	{
-		return GetLegalMovesEmpty(baseOrientation, sourceAbsolutePosition);
+		return new List<LegalMove>
+		{
+			new (Enums.Cardinal.North, Enums.MoveType.Empty, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.NorthEast, Enums.MoveType.Empty, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.East, Enums.MoveType.Empty, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			
+			new (Enums.Cardinal.SouthEast, Enums.MoveType.InsideCorner, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthEast, Enums.MoveType.Wall, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			
+			new (Enums.Cardinal.South, Enums.MoveType.OutsideCorner, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.South, Enums.MoveType.InsideCorner, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.South, Enums.MoveType.Wall, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.Floor, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.Wall, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.Wall, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.InsideCorner, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.OutsideCorner, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.OutsideCorner, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.OutsideCorner, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+
+			new (Enums.Cardinal.West, Enums.MoveType.Wall, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.West, Enums.MoveType.InsideCorner, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.West, Enums.MoveType.OutsideCorner, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+		
+			new (Enums.Cardinal.NorthWest, Enums.MoveType.InsideCorner, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.NorthWest, Enums.MoveType.Wall, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+		};
 	}
 
-	//todo - this is test data
 	static List<LegalMove> GetLegalMovesWall(Enums.Orientation baseOrientation, Vector3I sourceAbsolutePosition)
 	{
-		return GetLegalMovesEmpty(baseOrientation, sourceAbsolutePosition);
+		return new List<LegalMove>
+		{
+			new (Enums.Cardinal.North, Enums.MoveType.Empty, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.North, Enums.MoveType.Empty, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.North, Enums.MoveType.Empty, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.North, Enums.MoveType.Empty, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			
+			new (Enums.Cardinal.NorthEast, Enums.MoveType.Wall, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.NorthEast, Enums.MoveType.InsideCorner, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			
+			new (Enums.Cardinal.East, Enums.MoveType.Wall, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.East, Enums.MoveType.InsideCorner, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.East, Enums.MoveType.OutsideCorner, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			
+			new (Enums.Cardinal.SouthEast, Enums.MoveType.Floor, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.SouthEast, Enums.MoveType.Floor, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.SouthEast, Enums.MoveType.Floor, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.SouthEast, Enums.MoveType.Floor, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthEast, Enums.MoveType.Wall, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthEast, Enums.MoveType.Wall, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthEast, Enums.MoveType.InsideCorner, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthEast, Enums.MoveType.OutsideCorner, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			
+			new (Enums.Cardinal.South, Enums.MoveType.Floor, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.South, Enums.MoveType.Floor, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.South, Enums.MoveType.Floor, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.South, Enums.MoveType.Floor, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.South, Enums.MoveType.Wall, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.South, Enums.MoveType.OutsideCorner, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.South, Enums.MoveType.OutsideCorner, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+
+			new(Enums.Cardinal.SouthWest, Enums.MoveType.Floor, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			// new(Enums.Cardinal.SouthWest, Enums.MoveType.Floor, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			// new(Enums.Cardinal.SouthWest, Enums.MoveType.Floor, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			// new(Enums.Cardinal.SouthWest, Enums.MoveType.Floor, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new(Enums.Cardinal.SouthWest, Enums.MoveType.Wall, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new(Enums.Cardinal.SouthWest, Enums.MoveType.Wall, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new(Enums.Cardinal.SouthWest, Enums.MoveType.InsideCorner, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new(Enums.Cardinal.SouthWest, Enums.MoveType.OutsideCorner, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			
+			new(Enums.Cardinal.West, Enums.MoveType.Wall, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new(Enums.Cardinal.West, Enums.MoveType.InsideCorner, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new(Enums.Cardinal.West, Enums.MoveType.OutsideCorner, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			
+			new(Enums.Cardinal.NorthWest, Enums.MoveType.Wall, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			new(Enums.Cardinal.NorthWest, Enums.MoveType.InsideCorner, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+		};
 	}
 
-	//todo - this is test data
 	static List<LegalMove> GetLegalMovesFloor(Enums.Orientation baseOrientation, Vector3I sourceAbsolutePosition)
 	{
-		return GetLegalMovesEmpty(baseOrientation, sourceAbsolutePosition);
+		return new List<LegalMove>
+		{
+			new (Enums.Cardinal.North, Enums.MoveType.Floor, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.North, Enums.MoveType.Floor, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.North, Enums.MoveType.Floor, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.North, Enums.MoveType.Floor, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.North, Enums.MoveType.Wall, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.North, Enums.MoveType.OutsideCorner, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.North, Enums.MoveType.OutsideCorner, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			
+			new (Enums.Cardinal.NorthEast, Enums.MoveType.Floor, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.NorthEast, Enums.MoveType.Floor, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.NorthEast, Enums.MoveType.Floor, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.NorthEast, Enums.MoveType.Floor, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.NorthEast, Enums.MoveType.Wall, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.NorthEast, Enums.MoveType.Wall, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.NorthEast, Enums.MoveType.InsideCorner, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.NorthEast, Enums.MoveType.OutsideCorner, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.NorthEast, Enums.MoveType.OutsideCorner, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.NorthEast, Enums.MoveType.OutsideCorner, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			
+			new (Enums.Cardinal.East, Enums.MoveType.Floor, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.East, Enums.MoveType.Floor, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.East, Enums.MoveType.Floor, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.East, Enums.MoveType.Floor, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.East, Enums.MoveType.Wall, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.East, Enums.MoveType.OutsideCorner, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.East, Enums.MoveType.OutsideCorner, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			
+			new (Enums.Cardinal.SouthEast, Enums.MoveType.Floor, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.SouthEast, Enums.MoveType.Floor, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.SouthEast, Enums.MoveType.Floor, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.SouthEast, Enums.MoveType.Floor, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthEast, Enums.MoveType.Wall, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthEast, Enums.MoveType.Wall, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthEast, Enums.MoveType.InsideCorner, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthEast, Enums.MoveType.OutsideCorner, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthEast, Enums.MoveType.OutsideCorner, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthEast, Enums.MoveType.OutsideCorner, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+
+			new (Enums.Cardinal.South, Enums.MoveType.Floor, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.South, Enums.MoveType.Floor, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.South, Enums.MoveType.Floor, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.South, Enums.MoveType.Floor, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.South, Enums.MoveType.Wall, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.South, Enums.MoveType.OutsideCorner, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.South, Enums.MoveType.OutsideCorner, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.Floor, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.SouthWest, Enums.MoveType.Floor, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.SouthWest, Enums.MoveType.Floor, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.SouthWest, Enums.MoveType.Floor, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.Wall, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.Wall, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.InsideCorner, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.OutsideCorner, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.OutsideCorner, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.SouthWest, Enums.MoveType.OutsideCorner, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			
+			new (Enums.Cardinal.West, Enums.MoveType.Floor, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.West, Enums.MoveType.Floor, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.West, Enums.MoveType.Floor, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.West, Enums.MoveType.Floor, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.West, Enums.MoveType.Wall, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.West, Enums.MoveType.OutsideCorner, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.West, Enums.MoveType.OutsideCorner, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			
+			new (Enums.Cardinal.NorthWest, Enums.MoveType.Floor, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.NorthWest, Enums.MoveType.Floor, Enums.Orientation.Right, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.NorthWest, Enums.MoveType.Floor, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			// new (Enums.Cardinal.NorthWest, Enums.MoveType.Floor, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.NorthWest, Enums.MoveType.Wall, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.NorthWest, Enums.MoveType.Wall, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.NorthWest, Enums.MoveType.InsideCorner, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.NorthWest, Enums.MoveType.OutsideCorner, Enums.Orientation.Down, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.NorthWest, Enums.MoveType.OutsideCorner, Enums.Orientation.Left, baseOrientation, sourceAbsolutePosition),
+			new (Enums.Cardinal.NorthWest, Enums.MoveType.OutsideCorner, Enums.Orientation.Up, baseOrientation, sourceAbsolutePosition),
+		};
 	}
 
 	static List<LegalMove> GetLegalMovesEmpty(Enums.Orientation baseOrientation, Vector3I sourceAbsolutePosition)

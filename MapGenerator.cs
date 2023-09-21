@@ -24,7 +24,6 @@ public partial class MapGenerator : GridMap
 			var cellOrientation = GetCellItemOrientation(cell);
 			//todo - double check if i can include InvalidCellItem cells as existing moves
 			//if (cellItem == InvalidCellItem) continue;
-			Debug.WriteLine("type:" + cellItem + " orientation:" + cellOrientation);
 			_existingMoves.Add(new Move(MeshLibraryItemToMoveType(cellItem), Helpers.RawToOrientation(cellOrientation), cell));
 		}
 	}
@@ -33,9 +32,9 @@ public partial class MapGenerator : GridMap
 	{
 		var playerLocation = LocalToMap(ToLocal(new Vector3(_player.GlobalPosition.X, 0, _player.GlobalPosition.Z)));
 		
-		for (var x = -10; x < 11; x++)
+		for (var x = -1; x < 1; x++)
 		{
-			for (var z = -10; z < 11; z++)
+			for (var z = -1; z < 1; z++)
 			{
 				var targetCell = playerLocation + new Vector3I(x, 0, z);
 				if (GetCellItem(targetCell) == InvalidCellItem)
@@ -60,15 +59,22 @@ public partial class MapGenerator : GridMap
 		}
 		
 		legalMoves = FilterLegalMovesFromEveryDirection(legalMoves);
+
+		if (legalMoves.Count == 0)
+		{
+			Debug.WriteLine("No legal moves found!");
+			return;
+		}
 		
-		SetCellItem(targetCell, legalMoves[_random.Next(0, legalMoves.Count)]);
+		var chosenMove = legalMoves[_random.Next(0, legalMoves.Count)];
+		_existingMoves.Add(new Move(chosenMove.Name, chosenMove.Orientation, targetCell));
+		SetCellItem(targetCell, chosenMove);
 	}
 
 	List<LegalMove> FilterLegalMovesFromEveryDirection(List<LegalMove> legalMoves)
 	{
 		var set = new Dictionary<string, HashSet<Enums.Cardinal>>();
         
-		Console.WriteLine("legal move count:" + legalMoves.Count);
 		foreach (var move in legalMoves)
 		{
 			if (!set.ContainsKey(move.GetKey())) set[move.GetKey()] = new HashSet<Enums.Cardinal>();
@@ -94,41 +100,29 @@ public partial class MapGenerator : GridMap
 		
 	int MoveTypeToMeshLibraryItem(Enums.MoveType moveType)
 	{
-		switch (moveType)
+		return moveType switch
 		{
-			case Enums.MoveType.Empty:
-				return (int)InvalidCellItem;
-			case Enums.MoveType.Floor:
-				return MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "floor");
-			case Enums.MoveType.Wall:
-				return MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall");
-			case Enums.MoveType.InsideCorner:
-				return MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall-inside");
-			case Enums.MoveType.OutsideCorner:
-				return MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall-outside");
-			default:
-				throw new ArgumentOutOfRangeException(nameof(moveType), moveType, null);
-		}
+			Enums.MoveType.Empty => (int)InvalidCellItem,
+			Enums.MoveType.Floor => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "floor"),
+			Enums.MoveType.Wall => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall"),
+			Enums.MoveType.InsideCorner => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall-inside"),
+			Enums.MoveType.OutsideCorner => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall-outside"),
+			_ => throw new ArgumentOutOfRangeException(nameof(moveType), moveType, null)
+		};
 	}
 
 	Enums.MoveType MeshLibraryItemToMoveType(int meshLibraryItem)
 	{
 		var itemName = MeshLibrary.GetItemName(meshLibraryItem);
-		switch (itemName)
+		return itemName switch
 		{
-			case "":
-				return Enums.MoveType.Empty;
-			case "floor":
-				return Enums.MoveType.Floor;
-			case "wall":
-				return Enums.MoveType.Wall;
-			case "wall-inside":
-				return Enums.MoveType.InsideCorner;
-			case "wall-outside":
-				return Enums.MoveType.OutsideCorner;
-			default:
-				throw new ArgumentOutOfRangeException(nameof(meshLibraryItem), meshLibraryItem, null);
-		}
+			"" => Enums.MoveType.Empty,
+			"floor" => Enums.MoveType.Floor,
+			"wall" => Enums.MoveType.Wall,
+			"wall-inside" => Enums.MoveType.InsideCorner,
+			"wall-outside" => Enums.MoveType.OutsideCorner,
+			_ => throw new ArgumentOutOfRangeException(nameof(meshLibraryItem), meshLibraryItem, null)
+		};
 	}
 	
 	void SetCellItem(Vector3I position, LegalMove move)
