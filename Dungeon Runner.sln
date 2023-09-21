@@ -1,0 +1,19 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dungeon Runner", "Dungeon Runner.csproj", "{F9B79044-6A44-48CC-9333-B141D3CC71B6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	ExportDebug|Any CPU = ExportDebug|Any CPU
+	ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F9B79044-6A44-48CC-9333-B141D3CC71B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9B79044-6A44-48CC-9333-B141D3CC71B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9B79044-6A44-48CC-9333-B141D3CC71B6}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{F9B79044-6A44-48CC-9333-B141D3CC71B6}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{F9B79044-6A44-48CC-9333-B141D3CC71B6}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{F9B79044-6A44-48CC-9333-B141D3CC71B6}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+EndGlobal

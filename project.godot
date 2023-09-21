@@ -11,8 +11,18 @@ config_version=5
 [application]
 
 config/name="Dungeon Runner"
-config/features=PackedStringArray("4.1", "Forward Plus")
+run/main_scene="res://Dungeon.tscn"
+config/features=PackedStringArray("4.1", "C#", "Forward Plus")
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=320
+window/size/viewport_height=240
+window/size/window_width_override=1920
+window/size/window_height_override=1080
+window/stretch/mode="viewport"
+window/stretch/aspect="keep_height"
 
 [dotnet]
 
