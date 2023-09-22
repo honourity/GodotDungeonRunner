@@ -73,30 +73,25 @@ public partial class MapGenerator2 : GridMap
 			return;
 		}
 		
-		if (GetCellItem(North(cell)) != InvalidCellItem
-		    && GetCellItem(North(North(cell))) == InvalidCellItem)
+		if ((GetCellItem(North(cell)) != InvalidCellItem && GetCellItem(North(North(cell))) == InvalidCellItem)
+		    || (GetCellItem(East(cell)) != InvalidCellItem && GetCellItem(East(East(cell))) == InvalidCellItem)
+		    || (GetCellItem(South(cell)) != InvalidCellItem && GetCellItem(South(South(cell))) == InvalidCellItem)
+		    || (GetCellItem(West(cell)) != InvalidCellItem && GetCellItem(West(West(cell))) == InvalidCellItem))
 		{
 			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
 			return;
 		}
-		if (GetCellItem(East(cell)) != InvalidCellItem
-		    && GetCellItem(East(East(cell))) == InvalidCellItem)
+		
+		if ((GetCellItem(NorthEast(cell)) != InvalidCellItem && GetCellItem(NorthEast(NorthEast(cell))) == InvalidCellItem)
+		    || (GetCellItem(SouthEast(cell)) != InvalidCellItem && GetCellItem(SouthEast(SouthEast(cell))) == InvalidCellItem)
+		    || (GetCellItem(SouthWest(cell)) != InvalidCellItem && GetCellItem(SouthWest(SouthWest(cell))) == InvalidCellItem)
+		    || (GetCellItem(NorthWest(cell)) != InvalidCellItem && GetCellItem(NorthWest(NorthWest(cell))) == InvalidCellItem))
 		{
 			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
 			return;
 		}
-		if (GetCellItem(South(cell)) != InvalidCellItem
-		    && GetCellItem(South(South(cell))) == InvalidCellItem)
-		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
-			return;
-		}
-		if (GetCellItem(West(cell)) != InvalidCellItem
-		    && GetCellItem(West(West(cell))) == InvalidCellItem)
-		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
-			return;
-		}
+		
+		//todo - if my southeast is empty and my southwest is floor, then.... maybe?
 		
 		if (_random.Next(0, 2) == 0)
 		{
@@ -119,6 +114,23 @@ public partial class MapGenerator2 : GridMap
 	Vector3I West(Vector3I cell)
 	{
 		return cell + new Vector3I(0, 0, -1);
+	}
+	
+	Vector3I NorthEast(Vector3I cell)
+	{
+		return cell + new Vector3I(1, 0, 1);
+	}
+	Vector3I SouthEast(Vector3I cell)
+	{
+		return cell + new Vector3I(-1, 0, 1);
+	}
+	Vector3I SouthWest(Vector3I cell)
+	{
+		return cell + new Vector3I(-1, 0, -1);
+	}
+	Vector3I NorthWest(Vector3I cell)
+	{
+		return cell + new Vector3I(1, 0, -1);
 	}
 	
 	int OrientationToRaw(Enums.Orientation orientation)
