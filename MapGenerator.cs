@@ -23,7 +23,7 @@ public partial class MapGenerator : GridMap
 			var cellItem = GetCellItem(cell);
 			var cellOrientation = GetCellItemOrientation(cell);
 			//todo - double check if i can include InvalidCellItem cells as existing moves
-			//if (cellItem == InvalidCellItem) continue;
+			if (cellItem == InvalidCellItem) continue;
 			_existingMoves.Add(new Move(MeshLibraryItemToMoveType(cellItem), Helpers.RawToOrientation(cellOrientation), cell));
 		}
 	}
@@ -32,11 +32,15 @@ public partial class MapGenerator : GridMap
 	{
 		var playerLocation = LocalToMap(ToLocal(new Vector3(_player.GlobalPosition.X, 0, _player.GlobalPosition.Z)));
 		
-		for (var x = -1; x < 1; x++)
+		//todo - fill flooring at long distance
+		//todo - fill walls/corners at short distance
+		
+		for (var x = -1; x <= 1; x++)
 		{
-			for (var z = -1; z < 1; z++)
+			for (var z = -1; z <= 1; z++)
 			{
 				var targetCell = playerLocation + new Vector3I(x, 0, z);
+				//var targetCell = Vector3I.Zero + new Vector3I(x, 0, z);
 				if (GetCellItem(targetCell) == InvalidCellItem)
 				{
 					PopulateCell(targetCell);
