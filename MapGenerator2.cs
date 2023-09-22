@@ -6,6 +6,8 @@ using System.Linq;
 public partial class MapGenerator2 : GridMap
 {
 	Node3D _player;
+	Vector3I _lastPlayerLocation;
+
 	Vector3I PlayerPosition => LocalToMap(ToLocal(new Vector3(_player.GlobalPosition.X, 0, _player.GlobalPosition.Z)));
 	readonly Random _random = new();
 	readonly HashSet<Vector3I> _populatedCells = new(); // To keep track of processed cells
@@ -17,7 +19,12 @@ public partial class MapGenerator2 : GridMap
 	
 	public override void _Process(double delta)
 	{
-		PopulateCloseCells(10);
+		if (_lastPlayerLocation != _player.GlobalPosition)
+		{
+			PopulateCloseCells(10);
+		}
+		
+		_lastPlayerLocation = PlayerPosition;
 	}
 	
 	void PopulateCloseCells(int distance)
@@ -58,10 +65,60 @@ public partial class MapGenerator2 : GridMap
 	
 	void PopulateTargetCell(Vector3I cell)
 	{
+		if (GetCellItem(North(cell)) == InvalidCellItem
+		    && GetCellItem(South(cell)) == InvalidCellItem
+		    && GetCellItem(East(cell)) == InvalidCellItem
+		    && GetCellItem(West(cell)) == InvalidCellItem)
+		{
+			return;
+		}
+		
+		if (GetCellItem(North(cell)) != InvalidCellItem
+		    && GetCellItem(North(North(cell))) == InvalidCellItem)
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
+			return;
+		}
+		if (GetCellItem(East(cell)) != InvalidCellItem
+		    && GetCellItem(East(East(cell))) == InvalidCellItem)
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
+			return;
+		}
+		if (GetCellItem(South(cell)) != InvalidCellItem
+		    && GetCellItem(South(South(cell))) == InvalidCellItem)
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
+			return;
+		}
+		if (GetCellItem(West(cell)) != InvalidCellItem
+		    && GetCellItem(West(West(cell))) == InvalidCellItem)
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
+			return;
+		}
+		
 		if (_random.Next(0, 2) == 0)
 		{
 			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
 		}
+	}
+
+	Vector3I North(Vector3I cell)
+	{
+		return cell + new Vector3I(1, 0, 0);
+	}
+	Vector3I South(Vector3I cell)
+	{
+		return cell + new Vector3I(-1, 0, 0);
+	}
+	Vector3I East(Vector3I cell)
+	{
+		return cell + new Vector3I(0, 0, 1);
+	}
+	Vector3I West(Vector3I cell)
+	{
+		return cell + new Vector3I(0, 0, -1);
 	}
 	
 	int OrientationToRaw(Enums.Orientation orientation)
