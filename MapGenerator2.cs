@@ -10,7 +10,8 @@ public partial class MapGenerator2 : GridMap
 
 	Vector3I PlayerPosition => LocalToMap(ToLocal(new Vector3(_player.GlobalPosition.X, 0, _player.GlobalPosition.Z)));
 	readonly Random _random = new();
-	readonly HashSet<Vector3I> _populatedCells = new(); // To keep track of processed cells
+	readonly HashSet<Vector3I> _floorProcessedCells = new();
+	readonly HashSet<Vector3I> _wallProcessedCells = new();
 	
 	public override void _Ready()
 	{
@@ -21,13 +22,14 @@ public partial class MapGenerator2 : GridMap
 	{
 		if (_lastPlayerLocation != _player.GlobalPosition)
 		{
-			PopulateCloseCells(10);
+			ApplyFloorToCells(100);
+			ApplyWallsToCells(64);
 		}
 		
 		_lastPlayerLocation = PlayerPosition;
 	}
-	
-	void PopulateCloseCells(int distance)
+
+	void ApplyWallsToCells(int distance)
 	{
 		var queue = new Queue<Vector3I>();
 		var visitedCells = new HashSet<Vector3I>();
@@ -40,10 +42,10 @@ public partial class MapGenerator2 : GridMap
 			if (visitedCells.Contains(cell)) continue;
 			visitedCells.Add(cell);
 
-			if (!_populatedCells.Contains(cell))
+			if (!_wallProcessedCells.Contains(cell))
 			{
-				_populatedCells.Add(cell);
-				PopulateTargetCell(cell);
+				_wallProcessedCells.Add(cell);
+				ApplyWallsToTargetCell(cell);
 			}
 
 			// Enqueue neighboring cells with incremented distance.
@@ -51,10 +53,33 @@ public partial class MapGenerator2 : GridMap
 			queue.Enqueue(cell + new Vector3I(-1, 0, 0));
 			queue.Enqueue(cell + new Vector3I(0, 0, 1));
 			queue.Enqueue(cell + new Vector3I(0, 0, -1));
-			// queue.Enqueue(new Cell(cell.Position + new Vector3I(1, 0, 1), cell.Distance + 1));
-			// queue.Enqueue(new Cell(cell.Position + new Vector3I(1, 0, -1), cell.Distance + 1));
-			// queue.Enqueue(new Cell(cell.Position + new Vector3I(-1, 0, 1), cell.Distance + 1));
-			// queue.Enqueue(new Cell(cell.Position + new Vector3I(-1, 0, -1), cell.Distance + 1));
+		}
+	}
+
+	void ApplyFloorToCells(int distance)
+	{
+		var queue = new Queue<Vector3I>();
+		var visitedCells = new HashSet<Vector3I>();
+		queue.Enqueue(PlayerPosition);
+
+		while (queue.Count > 0)
+		{
+			var cell = queue.Dequeue();
+			if (GetCellDistance(cell) > distance) continue;
+			if (visitedCells.Contains(cell)) continue;
+			visitedCells.Add(cell);
+
+			if (!_floorProcessedCells.Contains(cell))
+			{
+				_floorProcessedCells.Add(cell);
+				ApplyFloorToTargetCell(cell);
+			}
+
+			// Enqueue neighboring cells with incremented distance.
+			queue.Enqueue(cell + new Vector3I(1, 0, 0));
+			queue.Enqueue(cell + new Vector3I(-1, 0, 0));
+			queue.Enqueue(cell + new Vector3I(0, 0, 1));
+			queue.Enqueue(cell + new Vector3I(0, 0, -1));
 		}
 	}
 
@@ -62,8 +87,220 @@ public partial class MapGenerator2 : GridMap
 	{
 		return (cell - PlayerPosition).LengthSquared();
 	}
+
+	void ApplyWallsToTargetCell(Vector3I cell)
+	{
+		if (IsNorthWallConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Wall), OrientationToRaw(Enums.Orientation.Right));
+		}
+		else if (IsSouthWallConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Wall), OrientationToRaw(Enums.Orientation.Left));
+		}
+		else if (IsEastWallConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Wall), OrientationToRaw(Enums.Orientation.Down));
+		}
+		else if (IsWestWallConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Wall), OrientationToRaw(Enums.Orientation.Up));
+		}
+		else if (IsNorthWallEndCapConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Wall), OrientationToRaw(Enums.Orientation.Right));
+		}
+		else if (IsEastWallEndCapConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Wall), OrientationToRaw(Enums.Orientation.Down));
+		}
+		else if (IsSouthWallEndCapConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Wall), OrientationToRaw(Enums.Orientation.Left));
+		}
+		else if (IsWestWallEndCapConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Wall), OrientationToRaw(Enums.Orientation.Up));
+		}
+		else if (IsNorthEastInsideCornerConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.InsideCorner), OrientationToRaw(Enums.Orientation.Right));
+		}
+		else if (IsSouthEastInsideCornerConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.InsideCorner), OrientationToRaw(Enums.Orientation.Down));
+		}
+		else if (IsSouthWestInsideCornerConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.InsideCorner), OrientationToRaw(Enums.Orientation.Left));
+		}
+		else if (IsNorthWestInsideCornerConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.InsideCorner), OrientationToRaw(Enums.Orientation.Up));
+		}
+		else if (IsNorthEastOutsideCornerConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.OutsideCorner), OrientationToRaw(Enums.Orientation.Right));
+		}
+		else if (IsSouthEastOutsideCornerConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.OutsideCorner), OrientationToRaw(Enums.Orientation.Down));
+		}
+		else if (IsSouthWestOutsideCornerConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.OutsideCorner), OrientationToRaw(Enums.Orientation.Left));
+		}
+		else if (IsNorthWestOutsideCornerConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.OutsideCorner), OrientationToRaw(Enums.Orientation.Up));
+		}
+	}
+
+	bool IsNorthEastOutsideCornerConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(North(cell)) != InvalidCellItem
+		       && GetCellItem(East(cell)) != InvalidCellItem
+		       && GetCellItem(NorthEast(cell)) == InvalidCellItem;
+	}
+	bool IsSouthEastOutsideCornerConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(East(cell)) != InvalidCellItem
+		       && GetCellItem(South(cell)) != InvalidCellItem
+		       && GetCellItem(SouthEast(cell)) == InvalidCellItem;
+	}
+	bool IsSouthWestOutsideCornerConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(South(cell)) != InvalidCellItem
+		       && GetCellItem(West(cell)) != InvalidCellItem
+		       && GetCellItem(SouthWest(cell)) == InvalidCellItem;
+	}
+	bool IsNorthWestOutsideCornerConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(North(cell)) != InvalidCellItem
+		       && GetCellItem(West(cell)) != InvalidCellItem
+		       && GetCellItem(NorthWest(cell)) == InvalidCellItem;
+	}
+
+	bool IsSouthWestInsideCornerConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(West(cell)) == InvalidCellItem
+		       && GetCellItem(South(cell)) == InvalidCellItem
+		       && GetCellItem(North(cell)) != InvalidCellItem
+		       && GetCellItem(NorthEast(cell)) != InvalidCellItem
+		       && GetCellItem(East(cell)) != InvalidCellItem;
+	}
+	bool IsSouthEastInsideCornerConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(West(cell)) != InvalidCellItem
+		       && GetCellItem(NorthWest(cell)) != InvalidCellItem
+		       && GetCellItem(North(cell)) != InvalidCellItem
+		       && GetCellItem(South(cell)) == InvalidCellItem
+		       && GetCellItem(East(cell)) == InvalidCellItem;
+	}
+	bool IsNorthWestInsideCornerConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(West(cell)) == InvalidCellItem
+		       && GetCellItem(North(cell)) == InvalidCellItem
+		       && GetCellItem(South(cell)) != InvalidCellItem
+		       && GetCellItem(SouthEast(cell)) != InvalidCellItem
+		       && GetCellItem(East(cell)) != InvalidCellItem;
+	}
+	bool IsNorthEastInsideCornerConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(West(cell)) != InvalidCellItem
+		       && GetCellItem(South(cell)) != InvalidCellItem
+		       && GetCellItem(SouthWest(cell)) != InvalidCellItem
+		       && GetCellItem(North(cell)) == InvalidCellItem
+		       && GetCellItem(East(cell)) == InvalidCellItem;
+	}
+
+	bool IsEastWallConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(North(cell)) != InvalidCellItem
+		       && GetCellItem(South(cell)) != InvalidCellItem
+		       && GetCellItem(East(cell)) == InvalidCellItem
+		       && GetCellItem(West(cell)) != InvalidCellItem
+		       && GetCellItem(NorthWest(cell)) != InvalidCellItem
+		       && GetCellItem(SouthWest(cell)) != InvalidCellItem;
+	}
+	bool IsWestWallConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(North(cell)) != InvalidCellItem
+		       && GetCellItem(South(cell)) != InvalidCellItem
+		       && GetCellItem(West(cell)) == InvalidCellItem
+		       && GetCellItem(East(cell)) != InvalidCellItem
+		       && GetCellItem(NorthEast(cell)) != InvalidCellItem
+		       && GetCellItem(SouthEast(cell)) != InvalidCellItem;
+	}
+	bool IsNorthWallConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(West(cell)) != InvalidCellItem
+		       && GetCellItem(East(cell)) != InvalidCellItem
+		       && GetCellItem(North(cell)) == InvalidCellItem
+		       && GetCellItem(South(cell)) != InvalidCellItem
+		       && GetCellItem(SouthEast(cell)) != InvalidCellItem
+		       && GetCellItem(SouthWest(cell)) != InvalidCellItem;
+	}
+	bool IsSouthWallConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(West(cell)) != InvalidCellItem
+		       && GetCellItem(East(cell)) != InvalidCellItem
+		       && GetCellItem(South(cell)) == InvalidCellItem
+		       && GetCellItem(North(cell)) != InvalidCellItem
+		       && GetCellItem(NorthEast(cell)) != InvalidCellItem
+		       && GetCellItem(NorthWest(cell)) != InvalidCellItem;
+	}
+
+	bool IsNorthWallEndCapConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(North(cell)) == InvalidCellItem
+		       && GetCellItem(East(cell)) != InvalidCellItem
+		       && GetCellItem(West(cell)) != InvalidCellItem
+		       && GetCellItem(NorthEast(cell)) != InvalidCellItem
+		       && GetCellItem(NorthWest(cell)) != InvalidCellItem;
+	}
+	bool IsEastWallEndCapConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(East(cell)) == InvalidCellItem
+		       && GetCellItem(North(cell)) != InvalidCellItem
+		       && GetCellItem(South(cell)) != InvalidCellItem
+		       && GetCellItem(NorthEast(cell)) != InvalidCellItem
+		       && GetCellItem(SouthEast(cell)) != InvalidCellItem;
+	}
+	bool IsSouthWallEndCapConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(South(cell)) == InvalidCellItem
+		       && GetCellItem(East(cell)) != InvalidCellItem
+		       && GetCellItem(West(cell)) != InvalidCellItem
+		       && GetCellItem(SouthEast(cell)) != InvalidCellItem
+		       && GetCellItem(SouthWest(cell)) != InvalidCellItem;
+	}
+	bool IsWestWallEndCapConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(West(cell)) == InvalidCellItem
+		       && GetCellItem(North(cell)) != InvalidCellItem
+		       && GetCellItem(South(cell)) != InvalidCellItem
+		       && GetCellItem(NorthWest(cell)) != InvalidCellItem
+		       && GetCellItem(SouthWest(cell)) != InvalidCellItem;
+	}
 	
-	void PopulateTargetCell(Vector3I cell)
+	void ApplyFloorToTargetCell(Vector3I cell)
 	{
 		if (IsIsolatedFloorConfiguration(cell))
 		{
@@ -87,13 +324,19 @@ public partial class MapGenerator2 : GridMap
 			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
 			return;
 		}
+
+		if (IsChokePoint2FloorConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
+			return;
+		}
 		
 		if (_random.Next(0, 2) == 0)
 		{
 			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
 		}
 	}
-
+	
 	bool IsIsolatedFloorConfiguration(Vector3I cell)
 	{
 		return GetCellItem(North(cell)) == InvalidCellItem
@@ -119,16 +362,30 @@ public partial class MapGenerator2 : GridMap
 
 	bool IsChokePointFloorConfiguration(Vector3I cell)
 	{
-		return (GetCellItem(North(cell)) != InvalidCellItem && GetCellItem(NorthEast(cell)) != InvalidCellItem && GetCellItem(East(cell)) != InvalidCellItem &&
-		        GetCellItem(East(NorthEast(cell))) == InvalidCellItem)
-		       || (GetCellItem(East(cell)) != InvalidCellItem && GetCellItem(SouthEast(cell)) != InvalidCellItem && GetCellItem(South(cell)) != InvalidCellItem &&
-		           GetCellItem(East(SouthEast(cell))) == InvalidCellItem)
-		       || (GetCellItem(South(cell)) != InvalidCellItem && GetCellItem(SouthWest(cell)) != InvalidCellItem && GetCellItem(West(cell)) != InvalidCellItem &&
-		           GetCellItem(West(SouthWest(cell))) == InvalidCellItem)
-		       || (GetCellItem(West(cell)) != InvalidCellItem && GetCellItem(NorthWest(cell)) != InvalidCellItem && GetCellItem(North(cell)) != InvalidCellItem &&
-		           GetCellItem(West(NorthWest(cell))) == InvalidCellItem);
+		return (GetCellItem(North(cell)) != InvalidCellItem
+		        && GetCellItem(NorthEast(cell)) != InvalidCellItem
+		        && GetCellItem(East(cell)) != InvalidCellItem
+		        && GetCellItem(East(NorthEast(cell))) == InvalidCellItem)
+		       || (GetCellItem(East(cell)) != InvalidCellItem
+		           && GetCellItem(SouthEast(cell)) != InvalidCellItem
+		           && GetCellItem(South(cell)) != InvalidCellItem
+		           && GetCellItem(East(SouthEast(cell))) == InvalidCellItem)
+		       || (GetCellItem(South(cell)) != InvalidCellItem
+		           && GetCellItem(SouthWest(cell)) != InvalidCellItem
+		           && GetCellItem(West(cell)) != InvalidCellItem
+		           && GetCellItem(West(SouthWest(cell))) == InvalidCellItem)
+		       || (GetCellItem(West(cell)) != InvalidCellItem
+		           && GetCellItem(NorthWest(cell)) != InvalidCellItem
+		           && GetCellItem(North(cell)) != InvalidCellItem
+		           && GetCellItem(West(NorthWest(cell))) == InvalidCellItem);
 	}
 	
+	bool IsChokePoint2FloorConfiguration(Vector3I cell)
+	{
+		//see procreate notes on pattern for this configuration
+		return false;
+	}
+
 	Vector3I North(Vector3I cell)
 	{
 		return cell + new Vector3I(1, 0, 0);
@@ -145,7 +402,6 @@ public partial class MapGenerator2 : GridMap
 	{
 		return cell + new Vector3I(0, 0, -1);
 	}
-	
 	Vector3I NorthEast(Vector3I cell)
 	{
 		return cell + new Vector3I(1, 0, 1);
