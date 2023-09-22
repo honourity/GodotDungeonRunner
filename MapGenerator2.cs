@@ -65,33 +65,28 @@ public partial class MapGenerator2 : GridMap
 	
 	void PopulateTargetCell(Vector3I cell)
 	{
-		if (GetCellItem(North(cell)) == InvalidCellItem
-		    && GetCellItem(South(cell)) == InvalidCellItem
-		    && GetCellItem(East(cell)) == InvalidCellItem
-		    && GetCellItem(West(cell)) == InvalidCellItem)
+		if (IsIsolatedFloorConfiguration(cell))
 		{
 			return;
 		}
 		
-		if ((GetCellItem(North(cell)) != InvalidCellItem && GetCellItem(North(North(cell))) == InvalidCellItem)
-		    || (GetCellItem(East(cell)) != InvalidCellItem && GetCellItem(East(East(cell))) == InvalidCellItem)
-		    || (GetCellItem(South(cell)) != InvalidCellItem && GetCellItem(South(South(cell))) == InvalidCellItem)
-		    || (GetCellItem(West(cell)) != InvalidCellItem && GetCellItem(West(West(cell))) == InvalidCellItem))
+		if (IsSingleWidthFloorConfiguration(cell))
 		{
 			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
 			return;
 		}
 		
-		if ((GetCellItem(NorthEast(cell)) != InvalidCellItem && GetCellItem(NorthEast(NorthEast(cell))) == InvalidCellItem)
-		    || (GetCellItem(SouthEast(cell)) != InvalidCellItem && GetCellItem(SouthEast(SouthEast(cell))) == InvalidCellItem)
-		    || (GetCellItem(SouthWest(cell)) != InvalidCellItem && GetCellItem(SouthWest(SouthWest(cell))) == InvalidCellItem)
-		    || (GetCellItem(NorthWest(cell)) != InvalidCellItem && GetCellItem(NorthWest(NorthWest(cell))) == InvalidCellItem))
+		if (IsDiagonalGapFloorConfiguration(cell))
 		{
 			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
 			return;
 		}
 		
-		//todo - if my southeast is empty and my southwest is floor, then.... maybe?
+		if (IsChokePointFloorConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
+			return;
+		}
 		
 		if (_random.Next(0, 2) == 0)
 		{
@@ -99,6 +94,41 @@ public partial class MapGenerator2 : GridMap
 		}
 	}
 
+	bool IsIsolatedFloorConfiguration(Vector3I cell)
+	{
+		return GetCellItem(North(cell)) == InvalidCellItem
+		       && GetCellItem(South(cell)) == InvalidCellItem
+		       && GetCellItem(East(cell)) == InvalidCellItem
+		       && GetCellItem(West(cell)) == InvalidCellItem;
+	}
+	bool IsSingleWidthFloorConfiguration(Vector3I cell)
+	{
+		return (GetCellItem(North(cell)) != InvalidCellItem && GetCellItem(North(North(cell))) == InvalidCellItem)
+		       || (GetCellItem(East(cell)) != InvalidCellItem && GetCellItem(East(East(cell))) == InvalidCellItem)
+		       || (GetCellItem(South(cell)) != InvalidCellItem && GetCellItem(South(South(cell))) == InvalidCellItem)
+		       || (GetCellItem(West(cell)) != InvalidCellItem && GetCellItem(West(West(cell))) == InvalidCellItem);
+	}
+
+	bool IsDiagonalGapFloorConfiguration(Vector3I cell)
+	{
+		return (GetCellItem(NorthEast(cell)) != InvalidCellItem && GetCellItem(NorthEast(NorthEast(cell))) == InvalidCellItem)
+		       || (GetCellItem(SouthEast(cell)) != InvalidCellItem && GetCellItem(SouthEast(SouthEast(cell))) == InvalidCellItem)
+		       || (GetCellItem(SouthWest(cell)) != InvalidCellItem && GetCellItem(SouthWest(SouthWest(cell))) == InvalidCellItem)
+		       || (GetCellItem(NorthWest(cell)) != InvalidCellItem && GetCellItem(NorthWest(NorthWest(cell))) == InvalidCellItem);
+	}
+
+	bool IsChokePointFloorConfiguration(Vector3I cell)
+	{
+		return (GetCellItem(North(cell)) != InvalidCellItem && GetCellItem(NorthEast(cell)) != InvalidCellItem && GetCellItem(East(cell)) != InvalidCellItem &&
+		        GetCellItem(East(NorthEast(cell))) == InvalidCellItem)
+		       || (GetCellItem(East(cell)) != InvalidCellItem && GetCellItem(SouthEast(cell)) != InvalidCellItem && GetCellItem(South(cell)) != InvalidCellItem &&
+		           GetCellItem(East(SouthEast(cell))) == InvalidCellItem)
+		       || (GetCellItem(South(cell)) != InvalidCellItem && GetCellItem(SouthWest(cell)) != InvalidCellItem && GetCellItem(West(cell)) != InvalidCellItem &&
+		           GetCellItem(West(SouthWest(cell))) == InvalidCellItem)
+		       || (GetCellItem(West(cell)) != InvalidCellItem && GetCellItem(NorthWest(cell)) != InvalidCellItem && GetCellItem(North(cell)) != InvalidCellItem &&
+		           GetCellItem(West(NorthWest(cell))) == InvalidCellItem);
+	}
+	
 	Vector3I North(Vector3I cell)
 	{
 		return cell + new Vector3I(1, 0, 0);
