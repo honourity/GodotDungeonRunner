@@ -11,6 +11,7 @@ public partial class MapGenerator2 : GridMap
 	Vector3I PlayerPosition => LocalToMap(ToLocal(new Vector3(_player.GlobalPosition.X, 0, _player.GlobalPosition.Z)));
 	readonly Random _random = new();
 	readonly HashSet<Vector3I> _floorProcessedCells = new();
+	readonly HashSet<Vector3I> _floorProcessedSecondPassCells = new();
 	readonly HashSet<Vector3I> _wallProcessedCells = new();
 	
 	public override void _Ready()
@@ -22,8 +23,9 @@ public partial class MapGenerator2 : GridMap
 	{
 		if (_lastPlayerLocation != _player.GlobalPosition)
 		{
-			ApplyFloorToCells(100);
-			ApplyWallsToCells(64);
+			ApplyFloorToCells(144);
+			ApplyFloorToCellsSecondPass(121);
+			ApplyWallsToCells(81);
 		}
 		
 		_lastPlayerLocation = PlayerPosition;
@@ -73,6 +75,33 @@ public partial class MapGenerator2 : GridMap
 			{
 				_floorProcessedCells.Add(cell);
 				ApplyFloorToTargetCell(cell);
+			}
+
+			// Enqueue neighboring cells with incremented distance.
+			queue.Enqueue(cell + new Vector3I(1, 0, 0));
+			queue.Enqueue(cell + new Vector3I(-1, 0, 0));
+			queue.Enqueue(cell + new Vector3I(0, 0, 1));
+			queue.Enqueue(cell + new Vector3I(0, 0, -1));
+		}
+	}
+	
+	void ApplyFloorToCellsSecondPass(int distance)
+	{
+		var queue = new Queue<Vector3I>();
+		var visitedCells = new HashSet<Vector3I>();
+		queue.Enqueue(PlayerPosition);
+
+		while (queue.Count > 0)
+		{
+			var cell = queue.Dequeue();
+			if (GetCellDistance(cell) > distance) continue;
+			if (visitedCells.Contains(cell)) continue;
+			visitedCells.Add(cell);
+
+			if (!_floorProcessedSecondPassCells.Contains(cell))
+			{
+				_floorProcessedSecondPassCells.Add(cell);
+				ApplyFloorToTargetCellSecondPass(cell);
 			}
 
 			// Enqueue neighboring cells with incremented distance.
@@ -306,32 +335,37 @@ public partial class MapGenerator2 : GridMap
 		{
 			return;
 		}
-		
 		if (IsSingleWidthFloorConfiguration(cell))
 		{
 			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
 			return;
 		}
-		
 		if (IsDiagonalGapFloorConfiguration(cell))
 		{
 			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
 			return;
 		}
-		
 		if (IsChokePointFloorConfiguration(cell))
-		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
-			return;
-		}
-
-		if (IsChokePoint2FloorConfiguration(cell))
 		{
 			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
 			return;
 		}
 		
 		if (_random.Next(0, 2) == 0)
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
+		}
+	}
+
+	//this method is necessary for configurations which are very sensitive to order of floor block placements
+	// so are cleaned up after normal floor placement has finished
+	void ApplyFloorToTargetCellSecondPass(Vector3I cell)
+	{
+		if (IsTetrisChokePointLeftFloorConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
+		}
+		if (IsTetrisChokePointRightFloorConfiguration(cell))
 		{
 			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
 		}
@@ -380,10 +414,51 @@ public partial class MapGenerator2 : GridMap
 		           && GetCellItem(West(NorthWest(cell))) == InvalidCellItem);
 	}
 	
-	bool IsChokePoint2FloorConfiguration(Vector3I cell)
+	bool IsTetrisChokePointLeftFloorConfiguration(Vector3I cell)
 	{
-		//see procreate notes on pattern for this configuration
-		return false;
+		return (GetCellItem(West(cell)) != InvalidCellItem
+		        && GetCellItem(West(West(cell))) != InvalidCellItem
+		        && GetCellItem(SouthWest(cell)) != InvalidCellItem
+		        && GetCellItem(West(SouthWest(cell))) == InvalidCellItem
+		        && GetCellItem(South(cell)) != InvalidCellItem)
+			|| (GetCellItem(West(cell)) != InvalidCellItem
+			    && GetCellItem(NorthWest(cell)) != InvalidCellItem
+			    && GetCellItem(North(NorthWest(cell))) == InvalidCellItem
+			    && GetCellItem(North(North(cell))) != InvalidCellItem
+			    && GetCellItem(North(cell)) != InvalidCellItem)
+			|| (GetCellItem(North(cell)) != InvalidCellItem
+			    && GetCellItem(NorthEast(cell)) != InvalidCellItem
+			    && GetCellItem(NorthEast(East(cell))) == InvalidCellItem
+			    && GetCellItem(East(East(cell))) != InvalidCellItem
+			    && GetCellItem(East(cell)) != InvalidCellItem)
+			|| (GetCellItem(East(cell)) != InvalidCellItem
+			    && GetCellItem(South(cell)) != InvalidCellItem
+			    && GetCellItem(SouthEast(cell)) != InvalidCellItem
+			    && GetCellItem(South(South(cell))) != InvalidCellItem
+			    && GetCellItem(South(SouthEast(cell))) == InvalidCellItem);
+	}
+	bool IsTetrisChokePointRightFloorConfiguration(Vector3I cell)
+	{
+		return (GetCellItem(North(cell)) != InvalidCellItem
+		        && GetCellItem(NorthWest(cell)) != InvalidCellItem
+		        && GetCellItem(NorthWest(West(cell))) == InvalidCellItem
+		        && GetCellItem(West(West(cell))) != InvalidCellItem
+		        && GetCellItem(West(cell)) != InvalidCellItem)
+		       || (GetCellItem(West(cell)) != InvalidCellItem
+		           && GetCellItem(SouthWest(cell)) != InvalidCellItem
+		           && GetCellItem(South(cell)) != InvalidCellItem
+		           && GetCellItem(South(South(cell))) != InvalidCellItem
+		           && GetCellItem(SouthWest(South(cell))) == InvalidCellItem)
+		       || (GetCellItem(South(cell)) != InvalidCellItem
+		           && GetCellItem(SouthEast(cell)) != InvalidCellItem
+		           && GetCellItem(SouthEast(East(cell))) == InvalidCellItem
+		           && GetCellItem(East(East(cell))) != InvalidCellItem
+		           && GetCellItem(East(cell)) != InvalidCellItem)
+		       || (GetCellItem(East(cell)) != InvalidCellItem
+		           && GetCellItem(NorthEast(cell)) != InvalidCellItem
+		           && GetCellItem(North(cell)) != InvalidCellItem
+		           && GetCellItem(North(North(cell))) != InvalidCellItem
+		           && GetCellItem(NorthEast(North(cell))) == InvalidCellItem);
 	}
 
 	Vector3I North(Vector3I cell)
