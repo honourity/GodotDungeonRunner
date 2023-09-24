@@ -121,75 +121,75 @@ public partial class MapGenerator : GridMap
 	{
 		if (IsNorthWallConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Wall), OrientationToRaw(Enums.Orientation.Right));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Wall), OrientationToRaw(Orientation.Right));
 		}
 		else if (IsSouthWallConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Wall), OrientationToRaw(Enums.Orientation.Left));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Wall), OrientationToRaw(Orientation.Left));
 		}
 		else if (IsEastWallConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Wall), OrientationToRaw(Enums.Orientation.Down));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Wall), OrientationToRaw(Orientation.Down));
 		}
 		else if (IsWestWallConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Wall), OrientationToRaw(Enums.Orientation.Up));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Wall), OrientationToRaw(Orientation.Up));
 		}
 		else if (IsNorthWallEndCapConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Wall), OrientationToRaw(Enums.Orientation.Right));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Wall), OrientationToRaw(Orientation.Right));
 		}
 		else if (IsEastWallEndCapConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Wall), OrientationToRaw(Enums.Orientation.Down));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Wall), OrientationToRaw(Orientation.Down));
 		}
 		else if (IsSouthWallEndCapConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Wall), OrientationToRaw(Enums.Orientation.Left));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Wall), OrientationToRaw(Orientation.Left));
 		}
 		else if (IsWestWallEndCapConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Wall), OrientationToRaw(Enums.Orientation.Up));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Wall), OrientationToRaw(Orientation.Up));
 		}
 		else if (IsNorthEastInsideCornerConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.InsideCorner), OrientationToRaw(Enums.Orientation.Right));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.InsideCorner), OrientationToRaw(Orientation.Right));
 		}
 		else if (IsSouthEastInsideCornerConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.InsideCorner), OrientationToRaw(Enums.Orientation.Down));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.InsideCorner), OrientationToRaw(Orientation.Down));
 		}
 		else if (IsSouthWestInsideCornerConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.InsideCorner), OrientationToRaw(Enums.Orientation.Left));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.InsideCorner), OrientationToRaw(Orientation.Left));
 		}
 		else if (IsNorthWestInsideCornerConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.InsideCorner), OrientationToRaw(Enums.Orientation.Up));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.InsideCorner), OrientationToRaw(Orientation.Up));
 		}
 		else if (IsDiagonalDoubleCornerUpConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.OutsideDoubleCorner), OrientationToRaw(Enums.Orientation.Up));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.OutsideDoubleCorner), OrientationToRaw(Orientation.Up));
 		}
 		else if (IsDiagonalDoubleCornerRightConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.OutsideDoubleCorner), OrientationToRaw(Enums.Orientation.Right));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.OutsideDoubleCorner), OrientationToRaw(Orientation.Right));
 		}
 		else if (IsNorthEastOutsideCornerConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.OutsideCorner), OrientationToRaw(Enums.Orientation.Right));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.OutsideCorner), OrientationToRaw(Orientation.Right));
 		}
 		else if (IsSouthEastOutsideCornerConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.OutsideCorner), OrientationToRaw(Enums.Orientation.Down));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.OutsideCorner), OrientationToRaw(Orientation.Down));
 		}
 		else if (IsSouthWestOutsideCornerConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.OutsideCorner), OrientationToRaw(Enums.Orientation.Left));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.OutsideCorner), OrientationToRaw(Orientation.Left));
 		}
 		else if (IsNorthWestOutsideCornerConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.OutsideCorner), OrientationToRaw(Enums.Orientation.Up));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.OutsideCorner), OrientationToRaw(Orientation.Up));
 		}
 	}
 
@@ -358,23 +358,23 @@ public partial class MapGenerator : GridMap
 		}
 		if (IsSingleWidthFloorConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Floor), OrientationToRaw(Orientation.Up));
 			return;
 		}
 		if (IsDiagonalGapFloorConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Floor), OrientationToRaw(Orientation.Up));
 			return;
 		}
 		if (IsChokePointFloorConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Floor), OrientationToRaw(Orientation.Up));
 			return;
 		}
 		
 		if (_random.Next(0, 2) == 0)
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Floor), OrientationToRaw(Orientation.Up));
 		}
 	}
 
@@ -384,11 +384,11 @@ public partial class MapGenerator : GridMap
 	{
 		if (IsTetrisChokePointLeftFloorConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Floor), OrientationToRaw(Orientation.Up));
 		}
 		if (IsTetrisChokePointRightFloorConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Floor), OrientationToRaw(Enums.Orientation.Up));
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Floor), OrientationToRaw(Orientation.Up));
 		}
 	}
 	
@@ -515,44 +515,62 @@ public partial class MapGenerator : GridMap
 		return cell + new Vector3I(1, 0, -1);
 	}
 	
-	int OrientationToRaw(Enums.Orientation orientation)
+	int OrientationToRaw(Orientation orientation)
 	{
 		return orientation switch
 		{
-			Enums.Orientation.Up => 0,
-			Enums.Orientation.Right => 22,
-			Enums.Orientation.Down => 10,
-			Enums.Orientation.Left => 16,
+			Orientation.Up => 0,
+			Orientation.Right => 22,
+			Orientation.Down => 10,
+			Orientation.Left => 16,
 			_ => throw new ArgumentOutOfRangeException(nameof(orientation), orientation, null)
 		};
 	}
 		
-	int MoveTypeToMeshLibraryItem(Enums.MoveType moveType)
+	int MoveTypeToMeshLibraryItem(MoveType moveType)
 	{
 		return moveType switch
 		{
-			Enums.MoveType.Empty => (int)InvalidCellItem,
-			Enums.MoveType.Floor => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "floor"),
-			Enums.MoveType.Wall => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall"),
-			Enums.MoveType.InsideCorner => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall-inside"),
-			Enums.MoveType.OutsideCorner => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall-outside"),
-			Enums.MoveType.OutsideDoubleCorner => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall-outside-double"),
+			MoveType.Empty => (int)InvalidCellItem,
+			MoveType.Floor => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "floor"),
+			MoveType.Wall => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall"),
+			MoveType.InsideCorner => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall-inside"),
+			MoveType.OutsideCorner => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall-outside"),
+			MoveType.OutsideDoubleCorner => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall-outside-double"),
 			_ => throw new ArgumentOutOfRangeException(nameof(moveType), moveType, null)
 		};
 	}
 
-	Enums.MoveType MeshLibraryItemToMoveType(int meshLibraryItem)
+	MoveType MeshLibraryItemToMoveType(int meshLibraryItem)
 	{
 		var itemName = MeshLibrary.GetItemName(meshLibraryItem);
 		return itemName switch
 		{
-			"" => Enums.MoveType.Empty,
-			"floor" => Enums.MoveType.Floor,
-			"wall" => Enums.MoveType.Wall,
-			"wall-inside" => Enums.MoveType.InsideCorner,
-			"wall-outside" => Enums.MoveType.OutsideCorner,
-			"wall-outside-double" => Enums.MoveType.OutsideDoubleCorner,
+			"" => MoveType.Empty,
+			"floor" => MoveType.Floor,
+			"wall" => MoveType.Wall,
+			"wall-inside" => MoveType.InsideCorner,
+			"wall-outside" => MoveType.OutsideCorner,
+			"wall-outside-double" => MoveType.OutsideDoubleCorner,
 			_ => throw new ArgumentOutOfRangeException(nameof(meshLibraryItem), meshLibraryItem, null)
 		};
+	}
+	
+	public enum MoveType
+	{
+		Empty,
+		Floor,
+		Wall,
+		InsideCorner,
+		OutsideCorner,
+		OutsideDoubleCorner
+	}
+
+	public enum Orientation
+	{
+		Up,
+		Right,
+		Down,
+		Left
 	}
 }
