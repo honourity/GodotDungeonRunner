@@ -7,6 +7,7 @@ public class Enums
         Wall,
         InsideCorner,
         OutsideCorner,
+        OutsideDoubleCorner
     }
 
     public enum Orientation

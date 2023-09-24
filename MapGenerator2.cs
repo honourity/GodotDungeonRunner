@@ -151,6 +151,14 @@ public partial class MapGenerator2 : GridMap
 		{
 			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.Wall), OrientationToRaw(Enums.Orientation.Up));
 		}
+		else if (IsDiagonalDoubleCornerUpConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.OutsideDoubleCorner), OrientationToRaw(Enums.Orientation.Up));
+		}
+		else if (IsDiagonalDoubleCornerRightConfiguration(cell))
+		{
+			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.OutsideDoubleCorner), OrientationToRaw(Enums.Orientation.Right));
+		}
 		else if (IsNorthEastInsideCornerConfiguration(cell))
 		{
 			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.InsideCorner), OrientationToRaw(Enums.Orientation.Right));
@@ -183,6 +191,19 @@ public partial class MapGenerator2 : GridMap
 		{
 			SetCellItem(cell, MoveTypeToMeshLibraryItem(Enums.MoveType.OutsideCorner), OrientationToRaw(Enums.Orientation.Up));
 		}
+	}
+
+	bool IsDiagonalDoubleCornerUpConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(NorthWest(cell)) == InvalidCellItem
+		       && GetCellItem(SouthEast(cell)) == InvalidCellItem;
+	}
+	bool IsDiagonalDoubleCornerRightConfiguration(Vector3I cell)
+	{
+		return GetCellItem(cell) != InvalidCellItem
+		       && GetCellItem(NorthEast(cell)) == InvalidCellItem
+		       && GetCellItem(SouthWest(cell)) == InvalidCellItem;
 	}
 
 	bool IsNorthEastOutsideCornerConfiguration(Vector3I cell)
@@ -515,6 +536,7 @@ public partial class MapGenerator2 : GridMap
 			Enums.MoveType.Wall => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall"),
 			Enums.MoveType.InsideCorner => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall-inside"),
 			Enums.MoveType.OutsideCorner => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall-outside"),
+			Enums.MoveType.OutsideDoubleCorner => MeshLibrary.GetItemList().FirstOrDefault(i => MeshLibrary.GetItemName(i) == "wall-outside-double"),
 			_ => throw new ArgumentOutOfRangeException(nameof(moveType), moveType, null)
 		};
 	}
@@ -529,6 +551,7 @@ public partial class MapGenerator2 : GridMap
 			"wall" => Enums.MoveType.Wall,
 			"wall-inside" => Enums.MoveType.InsideCorner,
 			"wall-outside" => Enums.MoveType.OutsideCorner,
+			"wall-outside-double" => Enums.MoveType.OutsideDoubleCorner,
 			_ => throw new ArgumentOutOfRangeException(nameof(meshLibraryItem), meshLibraryItem, null)
 		};
 	}
