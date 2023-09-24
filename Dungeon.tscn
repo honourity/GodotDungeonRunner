@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://ce63wud3ny4m0"]
 
 [ext_resource type="MeshLibrary" uid="uid://bevgpri132tnu" path="res://Assets/Models/tileset.tres" id="1_l1r5t"]
-[ext_resource type="Script" path="res://MapGenerator2.cs" id="2_j5yfs"]
+[ext_resource type="Script" path="res://MapGenerator.cs" id="2_iqhai"]
 [ext_resource type="Script" path="res://Player.cs" id="3_j61dw"]
 
 [sub_resource type="Sky" id="Sky_u6r5b"]
@@ -34,7 +34,7 @@ cell_center_y = false
 data = {
 "cells": PackedInt32Array(0, 0, 1441794, 0, 1, 2, 65535, 0, 2, 65535, 65535, 2, 0, 65535, 2, 1, 65535, 2, 1, 0, 2, 1, 1, 2, 65535, 65534, 2, 0, 65534, 2, 1, 65534, 2, 1, 65533, 2, 0, 65533, 2, 65535, 65533, 2, 2, 65533, 2, 2, 65534, 655362, 2, 65535, 2, 2, 0, 2, 65535, 1, 2, 2, 1, 2, 65534, 65533, 2, 65534, 65534, 2, 65534, 65535, 2, 65534, 0, 2, 65534, 1, 2, 65534, 2, 2, 65535, 2, 2, 0, 2, 2, 1, 2, 2, 2, 2, 2)
 }
-script = ExtResource("2_j5yfs")
+script = ExtResource("2_iqhai")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="Player" type="CharacterBody3D" parent="."]
