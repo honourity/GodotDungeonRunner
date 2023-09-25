@@ -1,8 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://ce63wud3ny4m0"]
+[gd_scene load_steps=9 format=3 uid="uid://ce63wud3ny4m0"]
 
 [ext_resource type="MeshLibrary" uid="uid://bevgpri132tnu" path="res://Assets/Models/tileset.tres" id="1_l1r5t"]
 [ext_resource type="Script" path="res://MapGenerator.cs" id="2_iqhai"]
 [ext_resource type="Script" path="res://Player.cs" id="3_j61dw"]
+[ext_resource type="Shader" path="res://ScreenFlash.gdshader" id="4_86okr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_el3o2"]
+shader = ExtResource("4_86okr")
+shader_parameter/toggle = 2.08165e-12
 
 [sub_resource type="Sky" id="Sky_u6r5b"]
 
@@ -23,6 +28,17 @@ fog_density = 0.2
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5vc45"]
 
 [node name="Dungeon Runner" type="Node3D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ScreenFlash" type="ColorRect" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_el3o2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.309804, 0.243137, 1)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_lj1rn")
