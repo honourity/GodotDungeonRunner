@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://d3qb1pqyn15yd"]
+
+[ext_resource type="Texture2D" uid="uid://8tsvpb2hgffu" path="res://Assets/Textures/bullet_decal.png" id="1_vfpil"]
+
+[node name="Decal" type="Decal"]
+size = Vector3(0.2, 0.2, 0.2)
+texture_albedo = ExtResource("1_vfpil")

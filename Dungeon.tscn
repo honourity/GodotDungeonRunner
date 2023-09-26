@@ -1,13 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://ce63wud3ny4m0"]
+[gd_scene load_steps=10 format=3 uid="uid://ce63wud3ny4m0"]
 
 [ext_resource type="MeshLibrary" uid="uid://bevgpri132tnu" path="res://Assets/Models/tileset.tres" id="1_l1r5t"]
 [ext_resource type="Script" path="res://MapGenerator.cs" id="2_iqhai"]
 [ext_resource type="Script" path="res://Player.cs" id="3_j61dw"]
 [ext_resource type="Shader" path="res://ScreenFlash.gdshader" id="4_86okr"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_el3o2"]
-shader = ExtResource("4_86okr")
-shader_parameter/toggle = 2.08165e-12
+[ext_resource type="Script" path="res://Gun.cs" id="4_t0xsq"]
 
 [sub_resource type="Sky" id="Sky_u6r5b"]
 
@@ -27,18 +24,11 @@ fog_density = 0.2
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5vc45"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_el3o2"]
+shader = ExtResource("4_86okr")
+shader_parameter/toggle = 2.08165e-12
+
 [node name="Dungeon Runner" type="Node3D"]
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="ScreenFlash" type="ColorRect" parent="CanvasLayer"]
-material = SubResource("ShaderMaterial_el3o2")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(1, 0.309804, 0.243137, 1)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_lj1rn")
@@ -55,15 +45,21 @@ metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="Player" type="CharacterBody3D" parent="."]
 transform = Transform3D(-4.37114e-08, -3.48787e-16, -1, 3.48787e-16, 1, -3.48787e-16, 1, -3.48787e-16, -4.37114e-08, 0.497597, 1.12921, 0.521022)
+collision_layer = 2
+collision_mask = 3
 up_direction = Vector3(1.04082e-12, 1, 1.04082e-12)
 script = ExtResource("3_j61dw")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+[node name="PlayerCollider" type="CollisionShape3D" parent="Player"]
 shape = SubResource("CapsuleShape3D_5vc45")
 
-[node name="Camera3D" type="Camera3D" parent="Player"]
+[node name="Camera" type="Camera3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.5, 2.08165e-12)
 fov = 110.0
+
+[node name="RayCast3D" type="RayCast3D" parent="Player/Camera"]
+target_position = Vector3(2.08165e-12, 2.08165e-12, -10)
+hit_from_inside = true
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.283638)
@@ -71,3 +67,14 @@ light_color = Color(1, 0.960784, 0.905882, 1)
 light_specular = 0.0
 spot_range = 7.4563
 spot_angle = 53.3719
+
+[node name="Gun" type="CanvasLayer" parent="Player"]
+script = ExtResource("4_t0xsq")
+
+[node name="ScreenFlash" type="ColorRect" parent="Player/Gun"]
+material = SubResource("ShaderMaterial_el3o2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
