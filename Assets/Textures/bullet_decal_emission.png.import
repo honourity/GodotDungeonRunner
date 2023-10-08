@@ -2,17 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b5jjlcixls3w0"
-path="res://.godot/imported/walls_brick.png-69d62df2a12af3b5856a9bf5600b097d.ctex"
+uid="uid://hfvyu4s14r1w"
+path="res://.godot/imported/bullet_decal_emission.png-1752ebc6abb6a95fb0a076a15417d14d.ctex"
 metadata={
 "vram_texture": false
 }
-generator_parameters={}
 
 [deps]
 
-source_file="res://Assets/Models/walls_brick.png"
-dest_files=["res://.godot/imported/walls_brick.png-69d62df2a12af3b5856a9bf5600b097d.ctex"]
+source_file="res://Assets/Textures/bullet_decal_emission.png"
+dest_files=["res://.godot/imported/bullet_decal_emission.png-1752ebc6abb6a95fb0a076a15417d14d.ctex"]
 
 [params]
 
@@ -32,4 +31,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1

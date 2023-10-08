@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://Player.cs" id="3_j61dw"]
 [ext_resource type="Shader" path="res://ScreenFlash.gdshader" id="4_86okr"]
 [ext_resource type="Script" path="res://Gun.cs" id="4_t0xsq"]
-[ext_resource type="Texture2D" uid="uid://jj53lcl8evwx" path="res://Assets/Textures/wraith_texture.png" id="6_iek46"]
+[ext_resource type="Texture2D" uid="uid://cx47qq6wtexhj" path="res://Assets/Textures/wraith_texture.png" id="6_iek46"]
 
 [sub_resource type="Sky" id="Sky_u6r5b"]
 
