@@ -10,7 +10,7 @@ public partial class Player : CharacterBody3D
 
 	public override void _Ready()
 	{
-		_gun = GetNode<Gun>("Gun");
+		_gun = GetNode("ScreenEffects").GetNode<Gun>("Gun");
 	}
 
 	public override void _PhysicsProcess(double delta)

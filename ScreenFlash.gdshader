@@ -1,6 +1,7 @@
 shader_type canvas_item;
-uniform float toggle;
+uniform float fade;
+uniform vec4 color;
 
 void fragment() {
-	COLOR = mix(vec4(0.0),vec4(1.0,0.0,0.0,1.0),toggle);
+	COLOR = mix(vec4(0.0),color,fade);
 }

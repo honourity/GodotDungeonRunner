@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://ce63wud3ny4m0"]
+[gd_scene load_steps=13 format=3 uid="uid://ce63wud3ny4m0"]
 
 [ext_resource type="MeshLibrary" uid="uid://bevgpri132tnu" path="res://Assets/Models/tileset.tres" id="1_l1r5t"]
 [ext_resource type="Script" path="res://MapGenerator.cs" id="2_iqhai"]
 [ext_resource type="Script" path="res://Player.cs" id="3_j61dw"]
 [ext_resource type="Shader" path="res://ScreenFlash.gdshader" id="4_86okr"]
 [ext_resource type="Script" path="res://Gun.cs" id="4_t0xsq"]
+[ext_resource type="Script" path="res://ScreenFlash.cs" id="5_yexwl"]
 [ext_resource type="Texture2D" uid="uid://cx47qq6wtexhj" path="res://Assets/Textures/wraith_texture.png" id="6_iek46"]
 
 [sub_resource type="Sky" id="Sky_u6r5b"]
@@ -27,7 +28,8 @@ fog_density = 0.2
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_el3o2"]
 shader = ExtResource("4_86okr")
-shader_parameter/toggle = 2.08165e-12
+shader_parameter/fade = null
+shader_parameter/color = null
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rg8ia"]
 
@@ -71,16 +73,25 @@ light_specular = 0.0
 spot_range = 7.4563
 spot_angle = 53.3719
 
-[node name="Gun" type="CanvasLayer" parent="Player"]
-script = ExtResource("4_t0xsq")
+[node name="ScreenEffects" type="CanvasLayer" parent="Player"]
 
-[node name="ScreenFlash" type="ColorRect" parent="Player/Gun"]
+[node name="ScreenFlash" type="ColorRect" parent="Player/ScreenEffects"]
 material = SubResource("ShaderMaterial_el3o2")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("5_yexwl")
+
+[node name="Gun" type="ColorRect" parent="Player/ScreenEffects"]
+material = SubResource("ShaderMaterial_el3o2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_t0xsq")
 
 [node name="Wraith" type="CharacterBody3D" parent="."]
 transform = Transform3D(0.999832, 0.0175564, -0.00528381, -0.0175536, 0.999846, 0.000590288, 0.00529336, -0.000497424, 0.999986, 2.08165e-12, 1, 2)
