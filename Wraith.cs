@@ -13,7 +13,19 @@ public partial class Wraith : CharacterBody3D
 	{
 		_navigationAgent3D = GetNode<NavigationAgent3D>("NavigationAgent3D");
 		_player = GetParent().GetNode<Player>("Player");
+
+		CallDeferred(MethodName.wait_for_map);
 	}
+
+	async void wait_for_map()
+	{
+		await ToSignal(GetTree(), "physics_frame");
+		await ToSignal(GetTree(), "process_frame");
+		
+		await ToSignal(GetTree(), "physics_frame");
+		await ToSignal(GetTree(), "process_frame");
+	}
+	
 	
 	public override void _PhysicsProcess(double delta)
 	{

@@ -5,7 +5,7 @@ using System.Linq;
 
 public partial class MapGenerator : GridMap
 {
-	Node3D _player;
+	Player _player;
 	Vector3I _lastPlayerLocation;
 
 	Vector3I PlayerPosition => LocalToMap(ToLocal(new Vector3(_player.GlobalPosition.X, 0, _player.GlobalPosition.Z)));
@@ -16,7 +16,7 @@ public partial class MapGenerator : GridMap
 	
 	public override void _Ready()
 	{
-		_player = GetParentNode3D().GetNode<Node3D>("Player");
+		_player = GetParent().GetParent().GetNode<Player>("Player");
 	}
 	
 	public override void _Process(double delta)

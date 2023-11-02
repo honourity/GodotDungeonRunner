@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ce63wud3ny4m0"]
+[gd_scene load_steps=15 format=3 uid="uid://ce63wud3ny4m0"]
 
 [ext_resource type="MeshLibrary" uid="uid://bevgpri132tnu" path="res://Assets/Models/tileset.tres" id="1_l1r5t"]
 [ext_resource type="Script" path="res://MapGenerator.cs" id="2_iqhai"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://Gun.cs" id="4_t0xsq"]
 [ext_resource type="Script" path="res://ScreenFlash.cs" id="5_yexwl"]
 [ext_resource type="Texture2D" uid="uid://cx47qq6wtexhj" path="res://Assets/Textures/wraith_texture.png" id="6_iek46"]
+[ext_resource type="Script" path="res://Wraith.cs" id="7_uq8sg"]
+[ext_resource type="NavigationMesh" uid="uid://x0b65m5ehjtl" path="res://Assets/nav_mesh_gridmap.tres" id="9_dasa8"]
 
 [sub_resource type="Sky" id="Sky_u6r5b"]
 
@@ -37,16 +39,6 @@ shader_parameter/color = null
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_lj1rn")
-
-[node name="GridMap" type="GridMap" parent="."]
-mesh_library = ExtResource("1_l1r5t")
-cell_size = Vector3(1, 1, 1)
-cell_center_y = false
-data = {
-"cells": PackedInt32Array(0, 0, 1441794, 0, 1, 2, 65535, 0, 2, 65535, 65535, 2, 0, 65535, 2, 1, 65535, 2, 1, 0, 2, 1, 1, 2, 65535, 65534, 2, 0, 65534, 2, 1, 65534, 2, 1, 65533, 2, 0, 65533, 2, 65535, 65533, 2, 2, 65533, 2, 2, 65534, 655362, 2, 65535, 2, 2, 0, 2, 65535, 1, 2, 2, 1, 2, 65534, 65533, 2, 65534, 65534, 2, 65534, 65535, 2, 65534, 0, 2, 65534, 1, 2, 65534, 2, 2, 65535, 2, 2, 0, 2, 2, 1, 2, 2, 2, 2, 2)
-}
-script = ExtResource("2_iqhai")
-metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="Player" type="CharacterBody3D" parent="."]
 transform = Transform3D(-4.37114e-08, -3.48787e-16, -1, 3.48787e-16, 1, -3.48787e-16, 1, -3.48787e-16, -4.37114e-08, 2.08165e-12, 1, 2.08165e-12)
@@ -94,9 +86,10 @@ grow_vertical = 2
 script = ExtResource("4_t0xsq")
 
 [node name="Wraith" type="CharacterBody3D" parent="."]
-transform = Transform3D(0.999832, 0.0175564, -0.00528381, -0.0175536, 0.999846, 0.000590288, 0.00529336, -0.000497424, 0.999986, 2.08165e-12, 1, 2)
+transform = Transform3D(0.999848, 0.0174524, 3.48787e-16, -0.0174524, 0.999848, -3.48787e-16, -3.54821e-16, 3.42647e-16, 1, 2, 1, 2.08165e-12)
 collision_layer = 2
 collision_mask = 3
+script = ExtResource("7_uq8sg")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Wraith"]
 shape = SubResource("CapsuleShape3D_rg8ia")
@@ -108,3 +101,19 @@ shaded = true
 double_sided = false
 texture_filter = 0
 texture = ExtResource("6_iek46")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="Wraith"]
+debug_enabled = true
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = ExtResource("9_dasa8")
+
+[node name="GridMap" type="GridMap" parent="NavigationRegion3D"]
+mesh_library = ExtResource("1_l1r5t")
+cell_size = Vector3(1, 1, 1)
+cell_center_y = false
+data = {
+"cells": PackedInt32Array(0, 0, 1441794, 0, 1, 2, 65535, 0, 2, 65535, 65535, 2, 0, 65535, 2, 1, 65535, 2, 1, 0, 2, 1, 1, 2, 65535, 65534, 2, 0, 65534, 2, 1, 65534, 2, 1, 65533, 2, 0, 65533, 2, 65535, 65533, 2, 2, 65533, 2, 2, 65534, 655362, 2, 65535, 2, 2, 0, 2, 65535, 1, 2, 2, 1, 2, 65534, 65533, 2, 65534, 65534, 2, 65534, 65535, 2, 65534, 0, 2, 65534, 1, 2, 65534, 2, 2, 65535, 2, 2, 0, 2, 2, 1, 2, 2, 2, 2, 2)
+}
+script = ExtResource("2_iqhai")
+metadata/_editor_floor_ = Vector3(0, 0, 0)

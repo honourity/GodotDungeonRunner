@@ -13,7 +13,7 @@ public partial class Gun : ColorRect
 		_cameraRayCast = GetParent().GetParent().GetNode<Camera3D>("Camera").GetNode<RayCast3D>("RayCast3D");
 		_player = GetParent().GetParent<CharacterBody3D>();
 		_bulletDecalScene = GD.Load<PackedScene>("res://bullet_decal.tscn");
-		_map = GetParent().GetParent().GetParent().GetNode("GridMap");
+		_map = GetParent().GetParent().GetParent().GetNode("NavigationRegion3D").GetNode("GridMap");
 		_screenFlash = GetParent().GetNode<ScreenFlash>("ScreenFlash");
 	}
 
