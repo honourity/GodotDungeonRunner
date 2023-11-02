@@ -3,7 +3,7 @@ using Godot;
 public partial class ScreenFlash : ColorRect
 {
 	ShaderMaterial _flashShader;
-	double _flashTimeTotal = 0.2;
+	double _flashTimeTotal;
 	double _flashTime;
 	
 	public override void _Ready()
@@ -23,17 +23,17 @@ public partial class ScreenFlash : ColorRect
 			}
 			else
 			{
-				
 				var fade = Mathf.Remap(_flashTime, 0, _flashTimeTotal, 1, 0);
 				_flashShader.SetShaderParameter("fade", fade);
 			}
 		}
 	}
 	
-	public void Flash(Color color)
+	public void Flash(Color color, double duration)
 	{
 		_flashShader.SetShaderParameter("color", color);
 		_flashShader.SetShaderParameter("fade", 1);
+		_flashTimeTotal = duration;
 		_flashTime = 0;
 	}
 }

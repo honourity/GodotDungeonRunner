@@ -8,9 +8,6 @@ public partial class Gun : ColorRect
 	CharacterBody3D _player;
 	Node _map;
 
-	double _flashTimeTotal = 0.2;
-	double _flashTime;
-	
 	public override void _Ready()
 	{
 		_cameraRayCast = GetParent().GetParent().GetNode<Camera3D>("Camera").GetNode<RayCast3D>("RayCast3D");
@@ -26,7 +23,7 @@ public partial class Gun : ColorRect
 	
 	public void Shoot()
 	{
-		_screenFlash.Flash(new Color(0.8f, 0.8f, 0.8f));
+		_screenFlash.Flash(new Color(0.8f, 0.8f, 0.8f), 0.2d);
 		
 		if (!_cameraRayCast.IsColliding()) return;
 		

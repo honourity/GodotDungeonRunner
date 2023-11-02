@@ -7,10 +7,12 @@ public partial class Player : CharacterBody3D
 	float _gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
 
 	Gun _gun;
+	ScreenFlash _screenFlash;
 
 	public override void _Ready()
 	{
 		_gun = GetNode("ScreenEffects").GetNode<Gun>("Gun");
+		_screenFlash = GetNode("ScreenEffects").GetNode<ScreenFlash>("ScreenFlash");
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -46,5 +48,10 @@ public partial class Player : CharacterBody3D
 
 		Velocity = velocity;
 		MoveAndSlide();
+	}
+
+	public void TakeDamage(int damage)
+	{
+		_screenFlash.Flash(new Color(0.8f, 0, 0), 1);
 	}
 }
