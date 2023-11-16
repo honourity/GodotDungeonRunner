@@ -26,7 +26,6 @@ public partial class Wraith : CharacterBody3D
 		await ToSignal(GetTree(), "process_frame");
 	}
 	
-	
 	public override void _PhysicsProcess(double delta)
 	{
 		if (GlobalPosition.DistanceTo(_player.GlobalPosition) < _navigationAgent3D.TargetDesiredDistance) return;
@@ -37,7 +36,7 @@ public partial class Wraith : CharacterBody3D
 			_navigationAgent3D.TargetPosition = _player.GlobalPosition;
 			_pathUpdateElapsed = 0;
 		}
-		
+
 		var currentPosition = GlobalPosition;
 		var nextPosition = _navigationAgent3D.GetNextPathPosition();
 		

@@ -13,10 +13,13 @@ public partial class MapGenerator : GridMap
 	readonly HashSet<Vector3I> _floorProcessedCells = new();
 	readonly HashSet<Vector3I> _floorProcessedSecondPassCells = new();
 	readonly HashSet<Vector3I> _wallProcessedCells = new();
+
+	public AStarGrid2D AstarGrid;
 	
 	public override void _Ready()
 	{
 		_player = GetParent().GetParent().GetNode<Player>("Player");
+		AstarGrid = new AStarGrid2D();
 	}
 	
 	public override void _Process(double delta)
@@ -26,9 +29,29 @@ public partial class MapGenerator : GridMap
 			ApplyFloorToCells(144);
 			ApplyFloorToCellsSecondPass(121);
 			ApplyWallsToCells(81);
+			UpdateAstarGrid();
 		}
 		
 		_lastPlayerLocation = PlayerPosition;
+	}
+
+	void UpdateAstarGrid()
+	{
+		var usedCells = GetUsedCells();
+		var minGridmapX = usedCells.MinBy(v => v.X).X;
+		var maxGridmapX = usedCells.MaxBy(v => v.X).X;
+		var height = maxGridmapX - minGridmapX;
+		var minGridmapZ = usedCells.MinBy(v => v.Z).Z;
+		var maxGridmapZ = usedCells.MaxBy(v => v.Z).Z;
+		var width = maxGridmapZ - minGridmapZ;
+
+		AstarGrid.Region = new Rect2I(minGridmapX, minGridmapZ, width, height);
+		AstarGrid.Update();
+
+		foreach (var cell in usedCells)
+		{
+			AstarGrid.SetPointSolid(new Vector2I(cell.X, cell.Z));
+		}
 	}
 
 	void ApplyWallsToCells(int distance)
@@ -358,23 +381,23 @@ public partial class MapGenerator : GridMap
 		}
 		if (IsSingleWidthFloorConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Floor), OrientationToRaw(Orientation.Up));
+			SetCellItemMiddleware(cell, MoveType.Floor, Orientation.Up);
 			return;
 		}
 		if (IsDiagonalGapFloorConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Floor), OrientationToRaw(Orientation.Up));
+			SetCellItemMiddleware(cell, MoveType.Floor, Orientation.Up);
 			return;
 		}
 		if (IsChokePointFloorConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Floor), OrientationToRaw(Orientation.Up));
+			SetCellItemMiddleware(cell, MoveType.Floor, Orientation.Up);
 			return;
 		}
 		
 		if (_random.Next(0, 2) == 0)
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Floor), OrientationToRaw(Orientation.Up));
+			SetCellItemMiddleware(cell, MoveType.Floor, Orientation.Up);
 		}
 	}
 
@@ -384,12 +407,17 @@ public partial class MapGenerator : GridMap
 	{
 		if (IsTetrisChokePointLeftFloorConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Floor), OrientationToRaw(Orientation.Up));
+			SetCellItemMiddleware(cell, MoveType.Floor, Orientation.Up);
 		}
 		if (IsTetrisChokePointRightFloorConfiguration(cell))
 		{
-			SetCellItem(cell, MoveTypeToMeshLibraryItem(MoveType.Floor), OrientationToRaw(Orientation.Up));
+			SetCellItemMiddleware(cell, MoveType.Floor, Orientation.Up);
 		}
+	}
+
+	void SetCellItemMiddleware(Vector3I cell, MoveType moveType, Orientation orientation)
+	{
+		SetCellItem(cell, MoveTypeToMeshLibraryItem(moveType), OrientationToRaw(orientation));
 	}
 	
 	bool IsIsolatedFloorConfiguration(Vector3I cell)
