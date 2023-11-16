@@ -23,9 +23,15 @@ public partial class Gun : ColorRect
 	
 	public void Shoot()
 	{
-		_screenFlash.Flash(new Color(0.8f, 0.8f, 0.8f), 0.2d);
+		_screenFlash.Flash(new Color(1f, 1f, 1f, 0.3f), 0.2d);
 		
 		if (!_cameraRayCast.IsColliding()) return;
+
+		if (_cameraRayCast.GetCollider() is Wraith wraith)
+		{
+			wraith.TakeHit();
+			return;
+		}
 		
 		var bulletDecal = _bulletDecalScene.Instantiate() as Node3D;
 		_map.AddChild(bulletDecal);

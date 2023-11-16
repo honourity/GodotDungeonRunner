@@ -57,6 +57,7 @@ fov = 110.0
 
 [node name="RayCast3D" type="RayCast3D" parent="Player/Camera"]
 target_position = Vector3(2.08165e-12, 2.08165e-12, -10)
+collision_mask = 5
 hit_from_inside = true
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Player"]
@@ -88,7 +89,7 @@ script = ExtResource("4_t0xsq")
 
 [node name="Wraith" type="CharacterBody3D" parent="."]
 transform = Transform3D(0.999848, 0.0174524, 3.48787e-16, -0.0174524, 0.999848, -3.48787e-16, -3.54821e-16, 3.42647e-16, 1, 2, 1, 2.08165e-12)
-collision_layer = 2
+collision_layer = 4
 collision_mask = 3
 script = ExtResource("7_uq8sg")
 

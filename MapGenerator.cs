@@ -29,7 +29,7 @@ public partial class MapGenerator : GridMap
 			ApplyFloorToCells(144);
 			ApplyFloorToCellsSecondPass(121);
 			ApplyWallsToCells(81);
-			UpdateAstarGrid();
+			//UpdateAstarGrid();
 		}
 		
 		_lastPlayerLocation = PlayerPosition;
