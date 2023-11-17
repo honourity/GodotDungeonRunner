@@ -7,6 +7,7 @@ public partial class MapGenerator : GridMap
 {
 	Player _player;
 	Vector3I _lastPlayerLocation;
+	PackedScene _wraithScene;
 
 	Vector3I PlayerPosition => LocalToMap(ToLocal(new Vector3(_player.GlobalPosition.X, 0, _player.GlobalPosition.Z)));
 	readonly Random _random = new();
@@ -18,8 +19,9 @@ public partial class MapGenerator : GridMap
 	
 	public override void _Ready()
 	{
-		_player = GetParent().GetParent().GetNode<Player>("Player");
-		AstarGrid = new AStarGrid2D();
+		_player = GetTree().CurrentScene.GetNode<Player>("Player");
+		_wraithScene = (PackedScene)ResourceLoader.Load("res://wraith.tscn");
+		//AstarGrid = new AStarGrid2D();
 	}
 	
 	public override void _Process(double delta)
@@ -33,6 +35,21 @@ public partial class MapGenerator : GridMap
 		}
 		
 		_lastPlayerLocation = PlayerPosition;
+	}
+
+	void SpawnWraith(Vector3I cell)
+	{
+		var wraiths = GetTree().GetNodesInGroup("wraiths").Select(w => w as Wraith);
+		var position = ToGlobal(MapToLocal(cell));
+
+		if (position.DistanceTo(_player.GlobalPosition) > 8f &&
+		    wraiths.Select(w => w?.GlobalPosition.DistanceTo(_player.GlobalPosition) < 20f).Count() < 5 &&
+			_random.Next(0, 5) == 0)
+		{
+			var wraith = _wraithScene.Instantiate<Node3D>();
+			GetTree().CurrentScene.AddChild(wraith);
+			wraith.GlobalPosition = new Vector3(ToGlobal(MapToLocal(cell)).X + 0.5f, 1f, ToGlobal(MapToLocal(cell)).Z + 0.5f);	
+		}
 	}
 
 	void UpdateAstarGrid()
@@ -71,6 +88,10 @@ public partial class MapGenerator : GridMap
 			{
 				_wallProcessedCells.Add(cell);
 				ApplyWallsToTargetCell(cell);
+				if (GetCellItem(cell) == MoveTypeToMeshLibraryItem(MoveType.Floor))
+				{
+					SpawnWraith(cell);
+				}
 			}
 
 			// Enqueue neighboring cells with incremented distance.

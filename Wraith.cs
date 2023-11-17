@@ -17,8 +17,10 @@ public partial class Wraith : CharacterBody3D
 	
 	public override void _Ready()
 	{
+		AddToGroup("wraiths");
+		
 		_navigationAgent3D = GetNode<NavigationAgent3D>("NavigationAgent3D");
-		_player = GetParent().GetNode<Player>("Player");
+		_player = GetTree().CurrentScene.GetNode<Player>("Player");
 		_sprite = GetNode<Sprite3D>("Sprite3D");
 		
 		CallDeferred(MethodName.wait_for_map);
@@ -35,8 +37,6 @@ public partial class Wraith : CharacterBody3D
 
 	public override void _Process(double delta)
 	{
-		//if (_takeHitTime > _takeHitDuration) return;
-		
 		_takeHitTime += delta;
 
 		if (_takeHitTime >= _takeHitDuration)

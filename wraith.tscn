@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://b22d0xeq4ul07"]
+
+[ext_resource type="Script" path="res://Wraith.cs" id="1_ua58b"]
+[ext_resource type="Texture2D" uid="uid://cx47qq6wtexhj" path="res://Assets/Textures/wraith_texture.png" id="2_aci48"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rg8ia"]
+
+[node name="Wraith" type="CharacterBody3D"]
+transform = Transform3D(0.999848, 0.0174524, 3.48787e-16, -0.0174524, 0.999848, -3.48787e-16, -3.54821e-16, 3.42647e-16, 1, 2, 1, 2.08165e-12)
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_ua58b")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_rg8ia")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+pixel_size = 0.04
+billboard = 1
+shaded = true
+double_sided = false
+texture_filter = 0
+texture = ExtResource("2_aci48")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
